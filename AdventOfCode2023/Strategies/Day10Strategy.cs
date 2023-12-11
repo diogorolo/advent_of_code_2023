@@ -251,64 +251,128 @@ public class Day10Pt23Strategy : IDayComputerStrategy
     {
         var intersects = 0;
         var onEdge = false;
-        List<int> analyzed = new List<int>();
-        for (int i = coords.x; i >= 0; i--)
+        if (coords.x > maxInput / 2)
         {
-            Node10 cNode = null;
-            Node10 nNode = null;
-            Node10 pNode = null;
-            for (int k = 0; k < loop.Count; k++)
+            List<int> analyzed = new List<int>();
+            for (int i = coords.x; i < maxInput; i++)
             {
-                if (analyzed.Contains(k))
+                Node10 cNode = null;
+                Node10 nNode = null;
+                Node10 pNode = null;
+                for (int k = 0; k < loop.Count; k++)
                 {
-                    continue;
-                }
-                cNode = loop.ElementAt(k);
-                if (cNode.X == i && cNode.Y == coords.y)
-                {
-                    int blah = k;
-                    do
+                    if (analyzed.Contains(k))
                     {
-                        nNode = loop.ElementAt(wrap(++blah, 0, loop.Count-1));
-                        if(nNode.Y == cNode.Y)
-                            analyzed.Add(blah);
-                    } while (nNode.Y == cNode.Y);
-                    blah = k;
-                    do
-                    {
-                        pNode = loop.ElementAt(wrap(--blah, 0, loop.Count-1));
-                        if(pNode.Y == cNode.Y)
-                            analyzed.Add(blah);
-                    } while (pNode.Y == cNode.Y);
-                    break;
-                }
-            }
-            if (nNode is not null)
-            {
-                if (cNode.Y != nNode.Y && pNode.Y != nNode.Y)
-                {
-                    intersects++;
-                }
-                // if (node.Val is '|')
-                // {
-                //     intersects++;
-                //     continue;
-                // }
+                        continue;
+                    }
 
-               
+                    cNode = loop.ElementAt(k);
+                    if (cNode.X == i && cNode.Y == coords.y)
+                    {
+                        int blah = k;
+                        do
+                        {
+                            nNode = loop.ElementAt(wrap(++blah, 0, loop.Count - 1));
+                            if (nNode.Y == cNode.Y)
+                                analyzed.Add(blah);
+                        } while (nNode.Y == cNode.Y);
+
+                        blah = k;
+                        do
+                        {
+                            pNode = loop.ElementAt(wrap(--blah, 0, loop.Count - 1));
+                            if (pNode.Y == cNode.Y)
+                                analyzed.Add(blah);
+                        } while (pNode.Y == cNode.Y);
+
+                        break;
+                    }
+                }
+
+                if (nNode is not null)
+                {
+                    if (cNode.Y != nNode.Y && pNode.Y != nNode.Y)
+                    {
+                        intersects++;
+                    }
+                    // if (node.Val is '|')
+                    // {
+                    //     intersects++;
+                    //     continue;
+                    // }
+
+
+                }
             }
         }
-        
+        else
+        {
+            {
+                List<int> analyzed = new List<int>();
+                for (int i = coords.x; i >= 0; i--)
+                {
+                    Node10 cNode = null;
+                    Node10 nNode = null;
+                    Node10 pNode = null;
+                    for (int k = 0; k < loop.Count; k++)
+                    {
+                        if (analyzed.Contains(k))
+                        {
+                            continue;
+                        }
+
+                        cNode = loop.ElementAt(k);
+                        if (cNode.X == i && cNode.Y == coords.y)
+                        {
+                            int blah = k;
+                            do
+                            {
+                                nNode = loop.ElementAt(wrap(++blah, 0, loop.Count - 1));
+                                if (nNode.Y == cNode.Y)
+                                    analyzed.Add(blah);
+                            } while (nNode.Y == cNode.Y);
+
+                            blah = k;
+                            do
+                            {
+                                pNode = loop.ElementAt(wrap(--blah, 0, loop.Count - 1));
+                                if (pNode.Y == cNode.Y)
+                                    analyzed.Add(blah);
+                            } while (pNode.Y == cNode.Y);
+
+                            break;
+                        }
+                    }
+
+                    if (nNode is not null)
+                    {
+                        if (cNode.Y != nNode.Y && pNode.Y != nNode.Y)
+                        {
+                            intersects++;
+                        }
+                        // if (node.Val is '|')
+                        // {
+                        //     intersects++;
+                        //     continue;
+                        // }
+
+
+                    }
+                }
+            }
+        }
+
 
         return intersects % 2 != 0;
     }
 
+    private int maxInput = 0;
 
     public string Compute(string[] input, bool debug = false)
     {
         var result = 0;
         var nodes = new Dictionary<int, Node10>();
-
+        maxInput = input[0].Length;
         Day10.Init(input, ref nodes);
         Day10.GetMap(input, ref nodes);
 
